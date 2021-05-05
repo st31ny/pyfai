@@ -1,0 +1,6 @@
+__pycache__/
+.pytest_cache/
+/fai/_version.py
+/fai.egg-info/
+/build/
+/dist/
