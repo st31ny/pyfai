@@ -1,3 +1,5 @@
+PYTHON ?= python3
+
 .PHONY: all
 all:
 	
@@ -11,15 +13,21 @@ help:
 	@echo "* help: show this help"
 	@echo "* test: run unittests"
 	@echo "* build: build python package"
+	@echo "* doc: build documentation"
 	@echo "* clean: remove build artefacts"
 
 .PHONY: test
 test:
-	python3 -m pytest
+	$(PYTHON) -m pytest
+	$(MAKE) -C docs doctest
 
 .PHONY: build
 build:
-	python3 -m build
+	$(PYTHON) -m build
+
+.PHONY: doc
+doc:
+	$(MAKE) -C docs html
 
 .PHONY: clean
 clean:
