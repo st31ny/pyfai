@@ -15,6 +15,7 @@ compact Python code with robust error handling.
    :caption: Contents:
 
    fai
+   fai-env
 
 
 Key Features

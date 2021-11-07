@@ -5,7 +5,16 @@
     and environment variables.
 """
 
+__version__ = None
+""" Package version
+"""
+
 try:
     from ._version import version as __version__
 except ImportError:
-    __version__ = None
+    pass
+
+# pylint: disable=wrong-import-position
+from .env import *
+
+__all__ = ['CONFIG_SPACE', 'target', 'Action', 'ACTION']
