@@ -1,0 +1,2 @@
+.. automodule:: fai.files
+   :members:

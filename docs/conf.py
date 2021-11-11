@@ -31,6 +31,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.intersphinx',
     'sphinx.ext.doctest',
+    'sphinx_paramlinks',
 ]
 
 intersphinx_mapping = {'python': ('https://docs.python.org/3', None)}
@@ -42,3 +43,10 @@ exclude_patterns = []
 
 html_theme = 'alabaster'
 #html_static_path = ['_static']
+
+# -- Options for autodoc -----------------------------------------------------
+
+autodoc_type_aliases = {
+    'InstallerPath': 'fai.files.InstallerPath',
+    'TargetPath': 'fai.files.TargetPath',
+}
