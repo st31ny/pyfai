@@ -16,6 +16,7 @@ compact Python code with robust error handling.
 
    fai
    fai-env
+   fai-subprocess
 
 
 Key Features
