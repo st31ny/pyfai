@@ -28,6 +28,21 @@ easily using make_: ``make test``
 
 .. _pytest: https://docs.pytest.org/
 
+Formatting
+==========
+
+The code is formatted with yapf_. Simply use make_ to format the code in place:
+``make format``.
+
+.. _yapf: https://pypi.org/project/yapf/
+
+Code Check
+==========
+
+With the make_ command ``make check`` the code base is tested (including
+documentation), and the code formatting verified. Consider using
+``make check`` as pre-commit hook.
+
 
 .. _make:
 
