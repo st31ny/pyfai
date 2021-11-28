@@ -30,6 +30,7 @@ test:
 .PHONY: check
 check: test
 	$(PYTHON) -m yapf --recursive --diff .
+	$(PYTHON) -m pylint fai
 
 .PHONY: build
 build:

@@ -40,8 +40,15 @@ Code Check
 ==========
 
 With the make_ command ``make check`` the code base is tested (including
-documentation), and the code formatting verified. Consider using
-``make check`` as pre-commit hook.
+documentation), analyzed with pylint_, and the code formatting verified.
+
+Pylint messages should be fixed or directly suppressed in the code if
+necessary. A suppression should have a comment explaining briefly why
+the construct is ok (e.g., "false positive").
+
+Consider using ``make check`` as pre-commit hook.
+
+.. _pylint: https://pylint.pycqa.org/en/latest/
 
 
 .. _make:
