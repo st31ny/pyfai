@@ -2,6 +2,10 @@
  FAI Python Lib
 ================
 
+.. image:: https://readthedocs.org/projects/fai/badge/?version=master
+    :target: https://fai.readthedocs.io/en/master/?badge=master
+    :alt: Documentation Status
+
 -------------------------------------
 Library for FAI customization scripts
 -------------------------------------
@@ -17,8 +21,12 @@ installation or softupdate.
 Documentation
 =============
 
+The compiled documentation can be `found on Read the Docs <rtd_>`_.
+
 The documentation is based on Sphinx and can be built using make_:
 ``make doc``. Documentation sources are in the ``docs/`` directory.
+
+.. _rtd: https://fai.readthedocs.io
 
 Tests
 =====
