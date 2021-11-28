@@ -3,6 +3,17 @@
 
     The root module provides access to most basic FAI functions
     and environment variables.
+
+    The following elements from other modules are re-exported:
+
+    * :any:`fai.env.* <fai.env>`
+    * :any:`fai.subprocess.run`
+    * :any:`fai.subprocess.run_installer`
+    * :any:`fai.files.InstallerPath`
+    * :any:`fai.files.TargetPath`
+    * :any:`fai.files.resolve`
+    * :any:`fai.files.unresolve`
+    * :any:`fai.files.fcopy`
 """
 
 __version__ = None
@@ -16,5 +27,5 @@ except ImportError:
 
 # pylint: disable=wrong-import-position
 from .env import *
-
-__all__ = ['CONFIG_SPACE', 'target', 'Action', 'ACTION']
+from .subprocess import run, run_installer
+from .files import InstallerPath, TargetPath, resolve, unresolve, fcopy
