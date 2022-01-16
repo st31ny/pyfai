@@ -13,6 +13,7 @@ def faienv_default(monkeypatch):
     monkeypatch.setenv('target', '/target')
     monkeypatch.setenv('ROOTCMD', 'chroot /target')
     monkeypatch.setenv('FAI_ACTION', 'install')
+    monkeypatch.setenv('LOGDIR', '/var/log/fai')
 
 
 @pytest.fixture
@@ -27,6 +28,7 @@ def test_all_empty():
     assert env.target is None
     assert env.ROOTCMD == []
     assert env.ACTION is None
+    assert env.LOGDIR is None
 
 
 def test_standard_conf(faienv_default):
@@ -38,6 +40,7 @@ def test_standard_conf(faienv_default):
     assert env.target == pathlib.Path('/target')
     assert env.ROOTCMD == ['chroot', '/target']
     assert env.ACTION == env.Action.install
+    assert env.LOGDIR == pathlib.Path('/var/log/fai')
 
 
 def test_custom_action(faienv_custom_action):

@@ -74,6 +74,12 @@ action, this is simply a :any:`str`.
 :meta hide-value:
 """
 
+LOGDIR: pathlib.Path = None
+"""FAI log directory (``$LOGDIR``)
+
+:meta hide-value:
+"""
+
 
 def _load_env(env: Mapping = os.environ):  # pylint: disable=dangerous-default-value
     def read_path(varname: str) -> Optional[pathlib.Path]:
@@ -101,15 +107,20 @@ def _load_env(env: Mapping = os.environ):  # pylint: disable=dangerous-default-v
     if ACTION is not None and hasattr(Action, ACTION):
         ACTION = Action[ACTION]
 
+    global LOGDIR
+    LOGDIR = read_path('LOGDIR')
+
     if not all([
             CONFIG_SPACE,
             target,
             #ROOTCMD, # $ROOTCMD can be empty
             ACTION,
+            LOGDIR,
     ]) and 'sphinx' not in sys.modules and 'pytest' not in sys.modules:
-        warnings.warn(
-            ("FAI environment variables not defined: Are you running in FAI? "
-             "For testing, set $FAI, $target, $ROOTCMD, and $FAI_ACTION."))
+        warnings.warn((
+            "FAI environment variables not defined: Are you running in FAI? "
+            "For testing, set $FAI, $target, $ROOTCMD, $FAI_ACTION, and $LOGDIR."
+        ))
 
 
 _load_env()
