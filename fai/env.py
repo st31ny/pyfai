@@ -50,8 +50,18 @@ thus be directly fed to :any:`subprocess.run`.
 """
 
 
+def is_online() -> bool:
+    """Check if system installed/updated by FAI is online
+
+    Some tasks such as starting a service are only possible when FAI is run
+    within the target system (i.e. FAI is doing a softupdate).
+    """
+    return target is not None and target == pathlib.Path('/')
+
+
 class Action(enum.Enum):
     """ Enum of well-known FAI actions """
+
     def _generate_next_value_(name, start, count, last_values):
         # pylint: disable=no-self-argument; done as offically documented
         return name
@@ -82,6 +92,7 @@ LOGDIR: pathlib.Path = None
 
 
 def _load_env(env: Mapping = os.environ):  # pylint: disable=dangerous-default-value
+
     def read_path(varname: str) -> Optional[pathlib.Path]:
         value = env.get(varname)
         if value is not None:

@@ -17,6 +17,12 @@ def faienv_default(monkeypatch):
 
 
 @pytest.fixture
+def faienv_softupdate(faienv_default, monkeypatch):
+    monkeypatch.setenv('FAI_ACTION', 'softupdate')
+    monkeypatch.setenv('target', '/')
+
+
+@pytest.fixture
 def faienv_custom_action(faienv_default, monkeypatch):
     monkeypatch.setenv('FAI_ACTION', 'confupdate')
 
@@ -29,6 +35,7 @@ def test_all_empty():
     assert env.ROOTCMD == []
     assert env.ACTION is None
     assert env.LOGDIR is None
+    assert env.is_online() == False
 
 
 def test_standard_conf(faienv_default):
@@ -41,9 +48,17 @@ def test_standard_conf(faienv_default):
     assert env.ROOTCMD == ['chroot', '/target']
     assert env.ACTION == env.Action.install
     assert env.LOGDIR == pathlib.Path('/var/log/fai')
+    assert env.is_online() == False
 
 
 def test_custom_action(faienv_custom_action):
     env._load_env()
     assert env.ACTION == 'confupdate'
     assert env.ACTION != env.Action.softupdate
+
+
+def test_softupdate(faienv_softupdate):
+    env._load_env()
+    assert env.ACTION == env.Action.softupdate
+    assert env.target == pathlib.Path('/')
+    assert env.is_online() == True
