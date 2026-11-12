@@ -46,7 +46,8 @@ test: pipenv
 	mkdir -p ./build/
 	@$(eval LOGFILE := $(shell mktemp --tmpdir faitest.XXXXXX))
 	pipenv run pytest --log-file=$(LOGFILE) --junitxml=./build/junit.xml \
-		--cov --cov-context=test --cov-fail-under 0 --cov-report term --cov-report=xml:build/coverage/coverage.xml --cov-report=html:build/coverage
+		--cov --cov-context=test --cov-fail-under 0 --cov-report term --cov-report=xml:build/coverage/coverage.xml --cov-report=html:build/coverage ;
+	$(MAKE) -C docs doctest
 	@if test -s $(LOGFILE); then echo "ERROR: stdout/stderr output detected:\n----------------" ; cat $(LOGFILE) ; echo "================" ; rm -f $(LOGFILE) ; exit 2 ; fi
 	@rm -f $(LOGFILE)
 
@@ -79,7 +80,7 @@ build:
 	$(PYTHON) -m build
 
 .PHONY: doc
-doc:
+doc: pipenv
 	$(MAKE) -C docs html
 
 .PHONY: clean
