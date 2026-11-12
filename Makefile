@@ -32,7 +32,7 @@ $(PIPENV)/Pipfile.lock: Pipfile.lock
 
 .PHONY: format
 format: pipenv
-	pipenv run yapf --recursive --in-place .
+	pipenv run yapf --recursive --in-place fai tests docs
 
 .PHONY: test
 test: pipenv
@@ -41,8 +41,8 @@ test: pipenv
 
 .PHONY: check
 check: test
-	$(PYTHON) -m yapf --recursive --diff .
-	$(PYTHON) -m pylint fai
+	pipenv run yapf --recursive --diff fai tests docs
+	pipenv run pylint fai
 
 .PHONY: build
 build:
