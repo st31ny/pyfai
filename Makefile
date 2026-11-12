@@ -64,7 +64,7 @@ pylint: pipenv
 	pipenv run anybadge --label=pylint --file=build/pylint/pylint.svg --value=$$PYLINT_SCORE --value-format "%.2f" -o 9=red 9.5=yellow 10=green
 
 .PHONY: check_pylint
-check_pylint: pipenv
+check_pylint:
 	@python3 -c "import json; import tomllib; \
 		CFG = tomllib.load(open('pyproject.toml', 'rb'))['tool']['pylint']['main']; \
 		PL = json.load(open('./build/pylint/pylint2.json', 'rb')); \
