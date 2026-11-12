@@ -1,0 +1,22 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+
+[dev-packages]
+fai = {file = ".", editable = true}
+yapf = "*"
+pylint = "*"
+pytest = "*"
+pytest-mock = "*"
+sphinx = "*"
+sphinx-paramlinks = "*"
+sphinx-autodoc-typehints = "*"
+pylint-json2html = "*"
+anybadge = "*"
+pytest-cov = "*"
+
+[requires]
+python_version = "3.12"

@@ -1,12 +1,76 @@
 [build-system]
 requires = [
-    "setuptools>=42",
+    "setuptools>=84",
     "wheel",
-    "toml",
     "setuptools_scm[toml]>=3.4",
 ]
 build-backend = "setuptools.build_meta"
 
+[project]
+name = "fai"
+dynamic = ["version", "dependencies", "optional-dependencies"]
+maintainers = [
+    {name = "Maximilian Stein", email = "m@steiny.biz"}
+]
+description = "FAI script integration lib"
+readme = "README.rst"
+requires-python = ">=3.11"
+license = {text = "MIT" }
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent"
+]
+
+[project.urls]
+Homepage = "https://github.com/st31ny/pyfai"
+
 [tool.setuptools_scm]
 write_to = "fai/_version.py"
 tag_regex = "^release/(?P<version>\\d+(\\.\\d+){2})$"
+
+[tool.coverage.run]
+# use source packages to get Gitlab coverage with relative_files
+source = ["fai"]
+omit = ["tests/*", "fai/_version.py"]
+patch = ["subprocess"]
+data_file = "build/coverage/data"
+relative_files = true
+branch = true
+
+[tool.coverage.report]
+precision = 1
+fail_under = 90
+exclude_also = [
+    'class .*\bProtocol\):',
+    '@(abc\.)?abstractmethod',
+]
+
+[tool.coverage.html]
+title = "fai: Coverage Report"
+show_contexts = true
+
+[tool.yapf]
+based_on_style = "pep8"
+
+[tool.pylint.main]
+py-version = "3.11"
+ignore = ["_version.py"]
+
+fail-on = []
+fail-under = 9
+
+[tool.pylint.design]
+# many kwargs are acceptable (positional args are enforced separately)
+max-args = 15
+# allow more attributes
+max-attributes = 20
+# allow more locals
+max-locals = 20
+# allow more branches
+max-branches = 16
+# allow more ancestors
+max-parents = 8
+
+[tool.pylint.logging]
+logging-format-style = "new"
