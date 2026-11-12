@@ -11,6 +11,7 @@ help:
 	@echo "Supported make targets:"
 	@echo "* all: does nothing"
 	@echo "* help: show this help"
+	@echo "* pipenv: sync dependencies to the pipenv (requires root)"
 	@echo "* format: format code"
 	@echo "* test: run unittests"
 	@echo "* check: run tests and additional checks"
@@ -18,13 +19,24 @@ help:
 	@echo "* doc: build documentation"
 	@echo "* clean: remove build artefacts"
 
+export PIPENV_VENV_IN_PROJECT = 1
+PIPENV                 := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/.venv
+
+.PHONY: pipenv
+pipenv: $(PIPENV)/Pipfile.lock
+
+$(PIPENV)/Pipfile.lock: Pipfile.lock
+	pipenv --python /usr/bin/python3 install --deploy --dev --ignore-pipfile
+	pipenv clean
+	cp $< $@
+
 .PHONY: format
-format:
-	$(PYTHON) -m yapf --recursive --in-place .
+format: pipenv
+	pipenv run yapf --recursive --in-place .
 
 .PHONY: test
-test:
-	$(PYTHON) -m pytest
+test: pipenv
+	pipenv run pytest
 	$(MAKE) -C docs doctest
 
 .PHONY: check

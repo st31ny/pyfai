@@ -10,13 +10,13 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "fai"
 dynamic = ["version", "dependencies", "optional-dependencies"]
-maintainers = {
+maintainers = [
     {name = "Maximilian Stein", email = "m@steiny.biz"}
-}
+]
 description = "FAI script integration lib"
 readme = "README.rst"
-requires-python = ">=3.7"
-license = MIT
+requires-python = ">=3.11"
+license = {text = "MIT" }
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
@@ -29,3 +29,11 @@ Homepage = "https://github.com/st31ny/pyfai"
 [tool.setuptools_scm]
 write_to = "fai/_version.py"
 tag_regex = "^release/(?P<version>\\d+(\\.\\d+){2})$"
+
+[tool.yapf]
+based_on_style = "pep8"
+
+[tool.pylint.main]
+py-version = "3.11"
+ignore= ["_version.py"]
+jobs=0
