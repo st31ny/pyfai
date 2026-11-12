@@ -6,9 +6,7 @@
 
 import datetime
 import pathlib
-import pkg_resources
 import sys
-import toml
 
 _rootdir = pathlib.Path(__file__).parents[1].absolute()
 sys.path.append(str(_rootdir))
@@ -22,7 +20,7 @@ copyright_years = ", ".join(
     str(y) for y in range(2021,
                           datetime.date.today().year + 1))
 copyright = "{} {}".format(copyright_years, author)
-release = fai.__version__ or pkg_resources.get_distribution('fai').version
+release = fai.__version__
 version = release
 
 # -- General configuration ---------------------------------------------------
