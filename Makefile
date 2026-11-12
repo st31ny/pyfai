@@ -75,6 +75,12 @@ check_pylint:
 		assert not FORBIDDEN, f'Forbidden messages: {FORBIDDEN}'; \
 		"
 
+.PHONY: check
+check:
+	$(MAKE) check_format
+	$(MAKE) check_coverage
+	$(MAKE) check_pylint
+
 .PHONY: build
 build:
 	$(PYTHON) -m build
