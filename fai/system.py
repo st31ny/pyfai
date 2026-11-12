@@ -48,3 +48,36 @@ def create_system_user(username, *, group=None, home=None, shell='/bin/false'):
     # ensure home dir exists
     if home:
         files.mkdir(home, user=username, group=group)
+
+def systemd_install(unit, *, start=None):
+    """ @brief  Install and enable a systemd unit
+        @param  unit Name of the systemd unit (including the service type suffix)
+        @param  start If True, start the systemd unit if possible (i.e., if softupdate
+                    is running). If None, start unit iff it is enabled.
+
+        The file /etc/systemd/system/<unit> and files in /etc/systemd/system/<unit>.d/
+        are fcopy'd. Non-existing files do not cause failure.
+
+        After installation, the unit is 'preset', i.e. enabled iff it has an install
+        section.
+
+        Finally, in softupdate, the unit is started iff start==True or start==None and
+        the unit is enabled.
+    """
+    assert '/' not in unit
+    assert not unit.startswith('-')
+    # install unit files
+    files.fcopy('etc/systemd/system/{}'.format(unit))
+    files.fcopy('etc/systemd/system/{}.d/'.format(unit), recursively=True)
+    # enable/start service
+    subprocess.run(['systemctl', 'preset', unit])
+    if env.is_online():
+        # if we are online, try to start the unit
+        if start is None:
+            # find out if the unit is enabled
+            result = subprocess.run(['systemctl', 'is-enabled', unit], check=False)
+            if result.returncode == 0 and result.stdout.startswith('enabled'):
+                start = True
+        if start:
+            # we want to start the unit now
+            subprocess.run(['systemctl', 'start', unit])
