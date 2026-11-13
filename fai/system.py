@@ -32,7 +32,7 @@ def create_system_user(username, *, group=None, home=None, shell='/bin/false'):
     args = ['adduser', '--quiet', '--system']
     if home:
         assert not str(home).startswith('-')
-        args.extend(['--home', files.TargetPath(home)])
+        args.extend(['--home', home])
     else:
         args.extend(['--no-create-home', '--home', nonexistent])
     args.append(username)

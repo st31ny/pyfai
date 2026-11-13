@@ -25,7 +25,7 @@ def test_create_user_default(faienv, subprocess_patch, files_mkdir_patch):
     sub = subprocess_patch
     dir = files_mkdir_patch
 
-    username = 'Foo'
+    username = 'foo'
     system.create_system_user(username)
 
     adduser_args = [
@@ -38,3 +38,38 @@ def test_create_user_default(faienv, subprocess_patch, files_mkdir_patch):
     ]
     sub.assert_has_calls([call(adduser_args), call(usermod_args)])
     dir.assert_not_called()
+
+
+def test_create_user_options(faienv, subprocess_patch, files_mkdir_patch):
+    sub = subprocess_patch
+    dir = files_mkdir_patch
+
+    username = 'foo'
+    group = 'bar'
+    home_dir = f'/home/{username}'
+    shell = '/bin/bash'
+    system.create_system_user(username,
+                              group=group,
+                              home=home_dir,
+                              shell=shell)
+
+    addgroup_args = ['addgroup', '--quiet', '--system', group]
+    adduser_args = [
+        'adduser', '--quiet', '--system', '--home', home_dir, username
+    ]
+    usermod_args = [
+        'usermod', '--shell', shell, '-g', group, '--move-home', '--home',
+        home_dir, username
+    ]
+
+    sub.assert_has_calls(
+        [call(addgroup_args),
+         call(adduser_args),
+         call(usermod_args)])
+    dir.assert_called_once()
+
+def test_create_user_fail(faienv, subprocess_patch, files_mkdir_patch):
+    username = '-foo'
+
+    with pytest.raises(AssertionError):
+        system.create_system_user(username)
