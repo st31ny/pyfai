@@ -35,11 +35,11 @@ $(PIPENV)/Pipfile.lock: Pipfile.lock
 
 .PHONY: format
 format: pipenv
-	pipenv run yapf --recursive --in-place fai tests docs
+	pipenv run yapf --recursive --in-place fai tests docs system
 
 .PHONY: check_format
 check_format: pipenv
-	pipenv run yapf --recursive --diff fai tests docs
+	pipenv run yapf --recursive --diff fai tests docs system
 
 .PHONY: test
 test: pipenv
