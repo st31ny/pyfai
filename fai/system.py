@@ -1,4 +1,4 @@
-"""" ToDo
+"""" Handling system services
     =============
 
     This module provides some functions to work with system services e.g. creating 
