@@ -49,6 +49,7 @@ def create_system_user(username, *, group=None, home=None, shell='/bin/false'):
     if home:
         files.mkdir(home, user=username, group=group)
 
+
 def systemd_install(unit, *, start=None):
     """ @brief  Install and enable a systemd unit
         @param  unit Name of the systemd unit (including the service type suffix)
@@ -75,7 +76,8 @@ def systemd_install(unit, *, start=None):
         # if we are online, try to start the unit
         if start is None:
             # find out if the unit is enabled
-            result = subprocess.run(['systemctl', 'is-enabled', unit], check=False)
+            result = subprocess.run(['systemctl', 'is-enabled', unit],
+                                    check=False)
             if result.returncode == 0 and result.stdout.startswith('enabled'):
                 start = True
         if start:
