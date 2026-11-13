@@ -53,7 +53,7 @@ def systemd_install(unit, *, start=None):
     """ @brief  Install and enable a systemd unit
         @param  unit Name of the systemd unit (including the service type suffix)
         @param  start If True, start the systemd unit if possible (i.e., if softupdate
-                    is running). If None, start unit iff it is enabled.
+                    is running). If None, start unit if it is enabled.
 
         The file /etc/systemd/system/<unit> and files in /etc/systemd/system/<unit>.d/
         are fcopy'd. Non-existing files do not cause failure.
@@ -67,8 +67,8 @@ def systemd_install(unit, *, start=None):
     assert '/' not in unit
     assert not unit.startswith('-')
     # install unit files
-    files.fcopy('etc/systemd/system/{}'.format(unit))
-    files.fcopy('etc/systemd/system/{}.d/'.format(unit), recursively=True)
+    files.fcopy(f'etc/systemd/system/{unit}')
+    files.fcopy(f'etc/systemd/system/{unit}.d/', recursively=True)
     # enable/start service
     subprocess.run(['systemctl', 'preset', unit])
     if env.is_online():
