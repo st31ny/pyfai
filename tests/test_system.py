@@ -66,10 +66,19 @@ def test_create_user_options(faienv, subprocess_patch, files_mkdir_patch):
         [call(addgroup_args),
          call(adduser_args),
          call(usermod_args)])
-    dir.assert_called_once()
+    dir.assert_called_once_with(home_dir, user=username, group=group)
+
 
 def test_create_user_fail(faienv, subprocess_patch, files_mkdir_patch):
+    sub = subprocess_patch
+    dir = files_mkdir_patch
+
     username = '-foo'
 
     with pytest.raises(AssertionError):
         system.create_system_user(username)
+
+    sub.assert_not_called()
+    dir.assert_not_called()
+
+
