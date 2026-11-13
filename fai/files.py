@@ -146,4 +146,6 @@ def fcopy(
         if option_set:
             fargs.append(option_name)
     fargs.extend(str(p) for p in args)
-    subprocess.run_installer(fargs)
+    result = subprocess.run_installer(fargs)
+
+    return "copied" in result.stdout
