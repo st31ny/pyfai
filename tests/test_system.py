@@ -82,3 +82,85 @@ def test_create_user_fail(faienv, subprocess_patch, files_mkdir_patch):
     dir.assert_not_called()
 
 
+@pytest.fixture
+def files_fcopy_patch(mocker):
+    return mocker.patch("fai.files.fcopy", autospec=True, spec_set=True)
+
+
+@pytest.fixture
+def env_online_patch(mocker):
+    return mocker.patch("fai.env.is_online", autospec=True, spec_set=True)
+
+
+def test_systemd_install_default_online(faienv, files_fcopy_patch,
+                                        subprocess_patch, env_online_patch):
+    fcp = files_fcopy_patch
+    sub = subprocess_patch
+
+    unit = "testservice"
+    env_online_patch.return_value = True
+    sub.return_value.returncode = 0
+    sub.return_value.stdout = 'enabled'
+
+    system.systemd_install(unit)
+
+    fcp.assert_has_calls([
+        call(f'etc/systemd/system/{unit}'),
+        call(f'etc/systemd/system/{unit}.d/', recursively=True)
+    ])
+    sub.assert_has_calls([
+        call(['systemctl', 'preset', unit]),
+        call(['systemctl', 'is-enabled', unit], check=False),
+        call(['systemctl', 'start', unit])
+    ])
+
+
+def test_systemd_install_default_offline(faienv, files_fcopy_patch,
+                                         subprocess_patch, env_online_patch):
+    fcp = files_fcopy_patch
+    sub = subprocess_patch
+
+    unit = "testservice"
+    env_online_patch.return_value = False
+
+    system.systemd_install(unit)
+
+    fcp.assert_has_calls([
+        call(f'etc/systemd/system/{unit}'),
+        call(f'etc/systemd/system/{unit}.d/', recursively=True)
+    ])
+    sub.assert_called_once_with(['systemctl', 'preset', unit])
+
+
+def test_systemd_install_start(faienv, files_fcopy_patch, subprocess_patch,
+                               env_online_patch):
+    fcp = files_fcopy_patch
+    sub = subprocess_patch
+
+    unit = "testservice"
+    env_online_patch.return_value = True
+
+    system.systemd_install(unit, start=True)
+
+    fcp.assert_has_calls([
+        call(f'etc/systemd/system/{unit}'),
+        call(f'etc/systemd/system/{unit}.d/', recursively=True)
+    ])
+    sub.assert_has_calls([
+        call(['systemctl', 'preset', unit]),
+        call(['systemctl', 'start', unit])
+    ])
+
+
+def test_systemd_install_fail(faienv, files_fcopy_patch, subprocess_patch,
+                              env_online_patch):
+    fcp = files_fcopy_patch
+    sub = subprocess_patch
+
+    unit = "-testservice"
+
+    with pytest.raises(AssertionError):
+        system.systemd_install(unit)
+
+    fcp.assert_not_called()
+    sub.assert_not_called()
