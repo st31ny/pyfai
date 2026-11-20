@@ -1,0 +1,24 @@
+name: build-pyfai
+on: [push]
+
+jobs:
+  unittests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Python-Version aus Pipfile
+        id: py
+        run: |
+          v=$(python3 -c "import tomllib; print(tomllib.load(open('Pipfile','rb'))['requires']['python_version'])")
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-python@v4
+        with: 
+          python-version: ${{ steps.py.outputs.version }}
+      - name: Install pipenv
+        run: pip install pipenv
+      - name: Verify Pipfile.lock
+        run: pipenv verify
+      - name: Install dependencies
+        run: pipenv install --dev
+      - name: Run tests
+        run: pipenv run pytest
