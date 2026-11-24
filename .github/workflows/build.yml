@@ -2,8 +2,10 @@ name: build-pyfai
 on: [push]
 
 jobs:
-  unittests:
+  test:
     runs-on: ubuntu-latest
+    env:
+      PIPENV_VENV_IN_PROJECT: "1"
     steps:
       - uses: actions/checkout@v4
       - name: Python-Version aus Pipfile
@@ -14,11 +16,9 @@ jobs:
       - uses: actions/setup-python@v4
         with: 
           python-version: ${{ steps.py.outputs.version }}
+      - name: Debug
+        run: python3 --version && which python3
       - name: Install pipenv
         run: pip install pipenv
-      - name: Verify Pipfile.lock
-        run: pipenv verify
-      - name: Install dependencies
-        run: pipenv install --dev
-      - name: Run tests
-        run: pipenv run pytest
+      - name: Make tests
+        run: make test
