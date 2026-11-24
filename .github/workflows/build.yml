@@ -18,7 +18,43 @@ jobs:
           python-version: ${{ steps.py.outputs.version }}
       - name: Install pipenv
         run: pip install pipenv
-      - name: Make tests
+      - name: Run tests
         run: make test
       - name: Linting
         run: make pylint
+  build:
+    runs-on: ubuntu-latest
+    env:
+      PIPENV_VENV_IN_PROJECT: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Python-Version aus Pipfile
+        id: py
+        run: |
+          v=$(python3 -c "import tomllib; print(tomllib.load(open('Pipfile','rb'))['requires']['python_version'])")
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-python@v4
+        with: 
+          python-version: ${{ steps.py.outputs.version }}
+      - name: Install pipenv
+        run: pip install pipenv
+      - name: Build
+        run: make build
+  check:
+    runs-on: ubuntu-latest
+    env:
+      PIPENV_VENV_IN_PROJECT: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Python-Version aus Pipfile
+        id: py
+        run: |
+          v=$(python3 -c "import tomllib; print(tomllib.load(open('Pipfile','rb'))['requires']['python_version'])")
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-python@v4
+        with: 
+          python-version: ${{ steps.py.outputs.version }}
+      - name: Install pipenv
+        run: pip install pipenv
+      - name: Check
+        run: make check
