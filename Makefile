@@ -58,7 +58,7 @@ check_coverage: pipenv
 .PHONY: pylint
 pylint: pipenv
 	mkdir -p ./build/pylint
-	pipenv run pylint --exit-zero -j0 --output-format=json:./build/pylint/pylint.json,json2:./build/pylint/pylint2.json,text:./build/pylint/pylint.log,colorized fai
+	pipenv run pylint --exit-zero --output-format=json:./build/pylint/pylint.json,json2:./build/pylint/pylint2.json,text:./build/pylint/pylint.log,colorized fai
 
 .PHONY: check_pylint
 check_pylint:
