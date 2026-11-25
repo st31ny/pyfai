@@ -58,10 +58,7 @@ check_coverage: pipenv
 .PHONY: pylint
 pylint: pipenv
 	mkdir -p ./build/pylint
-	pipenv run pylint --exit-zero -j0 --output-format=json:./build/pylint/pylint.json,json2:./build/pylint/pylint2.json,text:./build/pylint/pylint.log,colorized fai
-	pipenv run pylint-json2html -o ./build/pylint/index.html ./build/pylint/pylint.json
-	@PYLINT_SCORE=$$(python3 -c "import json; print(json.load(open('./build/pylint/pylint2.json', 'rb'))['statistics']['score'])"); \
-	pipenv run anybadge --label=pylint --file=build/pylint/pylint.svg --value=$$PYLINT_SCORE --value-format "%.2f" -o 9=red 9.5=yellow 10=green
+	pipenv run pylint --exit-zero --output-format=json:./build/pylint/pylint.json,json2:./build/pylint/pylint2.json,text:./build/pylint/pylint.log,colorized fai
 
 .PHONY: check_pylint
 check_pylint:
