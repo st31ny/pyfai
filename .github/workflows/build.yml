@@ -24,7 +24,9 @@ jobs:
         run: make pylint
       - uses: actions/upload-artifact@v7
         with: 
-          path: /build/coverage/*
+          path: |
+            build/coverage/*
+            build/pylint/*
           retention-days: 7 days
           
   build:
