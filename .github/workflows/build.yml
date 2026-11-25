@@ -7,13 +7,13 @@ jobs:
     env:
       PIPENV_VENV_IN_PROJECT: "1"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Python-Version aus Pipfile
         id: py
         run: |
           v=$(python3 -c "import tomllib; print(tomllib.load(open('Pipfile','rb'))['requires']['python_version'])")
           echo "version=$v" >> "$GITHUB_OUTPUT"
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v7
         with: 
           python-version: ${{ steps.py.outputs.version }}
       - name: Install pipenv
@@ -22,38 +22,47 @@ jobs:
         run: make test
       - name: Linting
         run: make pylint
+      - uses: actions/upload-artifact@v7
+        with: 
+          path: /build/coverage/*
+          retention-days: 7 days
+          
   build:
     runs-on: ubuntu-latest
     env:
       PIPENV_VENV_IN_PROJECT: "1"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Python-Version aus Pipfile
         id: py
         run: |
           v=$(python3 -c "import tomllib; print(tomllib.load(open('Pipfile','rb'))['requires']['python_version'])")
           echo "version=$v" >> "$GITHUB_OUTPUT"
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v7
         with: 
           python-version: ${{ steps.py.outputs.version }}
       - name: Install pipenv
-        run: pip install pipenv
+        run: pip install pipenv build
       - name: Build
         run: make build
   check:
     runs-on: ubuntu-latest
+    needs: test
     env:
       PIPENV_VENV_IN_PROJECT: "1"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Python-Version aus Pipfile
         id: py
         run: |
           v=$(python3 -c "import tomllib; print(tomllib.load(open('Pipfile','rb'))['requires']['python_version'])")
           echo "version=$v" >> "$GITHUB_OUTPUT"
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v7
         with: 
           python-version: ${{ steps.py.outputs.version }}
+      - uses: actions/download-artifact@v8
+        with:
+          name: 
       - name: Install pipenv
         run: pip install pipenv
       - name: Check
